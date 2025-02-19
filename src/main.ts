@@ -19,6 +19,7 @@ async function bootstrap() {
     origin: [
       'http://localhost:3000',
       'http://localhost:3001',
+      'https://ibmeshach-nft-mint-client.vercel.app',
       'https://nft-minting-backend-production.up.railway.app',
     ],
     credentials: true,
