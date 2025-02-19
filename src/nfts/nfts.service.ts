@@ -55,6 +55,9 @@ export class NftsService {
   async getNftGallaryByUserWalletAddress(userWalletAddress: string) {
     const nfts = await this.prisma.nft.findMany({
       where: { nftOwnerAddress: userWalletAddress },
+      orderBy: {
+        createdAt: 'desc',
+      },
     });
 
     if (nfts.length === 0) {
