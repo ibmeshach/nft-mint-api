@@ -34,3 +34,15 @@ export class StoreNftResponseDto {
   })
   data: Nft;
 }
+
+export class UpdateNftMintedStatusResponseDto {
+  @ApiProperty({
+    example: 200,
+  })
+  statusCode: number;
+
+  @ApiProperty({
+    example: 'Nft minted status has been successfully updated.',
+  })
+  message: string;
+}

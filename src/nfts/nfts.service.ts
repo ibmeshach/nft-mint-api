@@ -6,6 +6,7 @@ import {
 } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { StoreNftDto } from './dto/storeNft.dto';
+import { UpdateNftStatusDto } from './dto/updateNftStatus.dto';
 
 @Injectable()
 export class NftsService {
@@ -54,7 +55,7 @@ export class NftsService {
 
   async getNftGallaryByUserWalletAddress(userWalletAddress: string) {
     const nfts = await this.prisma.nft.findMany({
-      where: { nftOwnerAddress: userWalletAddress },
+      where: { nftOwnerAddress: userWalletAddress, minted: true },
       orderBy: {
         createdAt: 'desc',
       },
@@ -70,6 +71,28 @@ export class NftsService {
       statusCode: HttpStatus.OK,
       message: 'Nft gallery has been successfully retrieved.',
       data: nfts,
+    };
+  }
+
+  async updateNftMintedStatus(body: UpdateNftStatusDto) {
+    const { nftId, status } = body;
+    const existingNft = await this.prisma.nft.findUnique({
+      where: { nftId },
+    });
+
+    if (!existingNft) {
+      throw new NotFoundException('Nft record with nftId not found');
+    }
+
+    const updatedNft = await this.prisma.nft.update({
+      where: { nftId },
+      data: { minted: status },
+    });
+
+    return {
+      statusCode: HttpStatus.OK,
+      message: 'Nft minted status has been successfully updated.',
+      data: updatedNft,
     };
   }
 }

@@ -8,6 +8,7 @@ import {
   ParseIntPipe,
   Post,
   Query,
+  Patch,
 } from '@nestjs/common';
 import { NftsService } from './nfts.service';
 import { StoreNftDto } from './dto/storeNft.dto';
@@ -25,7 +26,9 @@ import { Nft } from './serializers/nft.serializer';
 import {
   NftGetNftGalleryResponseDto,
   StoreNftResponseDto,
+  UpdateNftMintedStatusResponseDto,
 } from './dto/nftSwaggerResponse.dto';
+import { UpdateNftStatusDto } from './dto/updateNftStatus.dto';
 
 @ApiTags('NFT')
 @Controller('nfts')
@@ -86,5 +89,19 @@ export class NftsController {
   @HttpCode(HttpStatus.OK)
   async getNftById(@Param('nftId', ParseIntPipe) nftId: number) {
     return this.nftsService.getNftById(nftId);
+  }
+
+  @ApiSecurity('x-api-key')
+  @ApiOkResponse({
+    description: 'Nft minted status has been successfully updated.',
+    type: UpdateNftMintedStatusResponseDto,
+  })
+  @ApiNotFoundResponse({
+    description: 'Nft record with nftId not found',
+  })
+  @Patch('minted-status')
+  @HttpCode(HttpStatus.OK)
+  async updateNftMintedStatus(@Body() body: UpdateNftStatusDto) {
+    return this.nftsService.updateNftMintedStatus(body);
   }
 }

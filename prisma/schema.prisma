@@ -21,6 +21,7 @@ model nft {
   nftDescription     String
   nftLogoUrl         String
   nftOwnerAddress    String
+  minted             Boolean @default(false)
   createdAt          DateTime @default(now())
   updatedAt          DateTime @updatedAt
 
